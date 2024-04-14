@@ -1,0 +1,11 @@
+# macOS system files
+.DS_Store
+
+# SQL database specific files
+*.sql
+*.sqlite
+*.db
+/mysql-data
+
+# Env files
+*.env
