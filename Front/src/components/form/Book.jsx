@@ -1,6 +1,6 @@
 import { DatePicker, InputPicker, Schema } from 'rsuite';
 import { Field, Textarea } from '@src/components/form/Fields'
-import { useAutoComplete, useCreate } from "@src/hooks/request";
+import { useAutoComplete } from "@src/hooks/request";
 import { formatToForm } from "@src/utils/listing";
 import Edition from "@src/components/form/Edition";
 
@@ -37,7 +37,7 @@ const Fields = (props) => {
 
   //TODO: Ne pas remplir l'autoComplete mais plutôt mettre la value dans l'inputPicker
   const autoCompleteDef = def?.author ? [def.author] : []
-  const {data, loading, get} = useAutoComplete('author');
+  const {data, loading, get} = useAutoComplete('author', autoCompleteDef);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Modal, Button, Form, ButtonToolbar, Message, toaster } from 'rsuite';
-import { useState, useRef, createContext } from 'react';
+import { useState, useRef, createContext, useEffect } from 'react';
 import { useCreate } from "@src/hooks/request";
 import useStore from "@src/store/research";
 const ErrorContext = createContext({});
@@ -21,7 +21,12 @@ export default function Edition(props) {
   const [_, setFormError] = useState({});
   const [formValue, setFormValue] = useState(defaultValue);
   const { errors, create, update, resetErrors } = useCreate(target);
-  const { activeModal, hideModal } = useStore();
+  const { activeModal, hideModal, closeBook, triggerRefresh } = useStore();
+
+
+  useEffect(() => {
+    setFormValue(defaultValue)
+  }, [defaultValue]);
 
   const handleSubmit = async() => {
     if (!formRef.current.check()) return;
@@ -36,6 +41,8 @@ export default function Edition(props) {
       toaster.push(<Message type="success">{successMessage}</Message>);
       setFormValue({})
       hideModal()
+      closeBook()
+      triggerRefresh()
     }
     else if(success === false){
       toaster.push(<Message type="error">Erreur serveur</Message>);

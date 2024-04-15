@@ -12,6 +12,7 @@ const initialState = {
     cacheData: []
   },
   availability: ['borrow', 'available'],
+  refresh: false,
   selectedBook: null,
   activeModal: null
 }
@@ -46,12 +47,20 @@ const useStore = create() (
           state.availability = value
         }),
 
-      showModal: (target) => set(() => ({
-        activeModal: target
-      })),
-      hideModal: () => set(() => ({
-        activeModal: null
-      })),
+      showModal: (target) =>
+        set(state => {
+          state.activeModal = target
+        }),
+      hideModal: () =>
+        set(state => {
+        state.activeModal = null
+      }),
+
+      triggerRefresh: () =>
+        set(state => {
+          state.selectedBook = null
+          state.refresh = !(state.refresh)
+      }),
 
   }))
 )
@@ -66,4 +75,5 @@ useStore.propTypes = {
   setAvailability: PropTypes.func,
   showModal: PropTypes.func,
   hideModal: PropTypes.func,
+  triggerRefresh: PropTypes.func,
 }

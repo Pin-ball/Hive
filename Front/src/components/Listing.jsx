@@ -1,33 +1,15 @@
 import { clsx } from 'clsx';
 import { Table, Loader } from 'rsuite';
 import { useInfiniteScroll } from "@src/hooks/infiniteScroll";
-import { infiniteScrollTrigger } from '@src/utils/listing'
-import { url } from '@src/utils/config'
+import { getListingUrl, infiniteScrollTrigger } from '@src/utils/listing'
 import useStore from "@src/store/research";
-import {useEffect, useState} from "react";
 
 const { Column, HeaderCell, Cell } = Table;
-const defaultUrl = `${url.backend}/book/list`
+
+
 export default function Listing() {
-  const [requestUrl, setRequestUrl] = useState(defaultUrl)
-  const { data, isLoading, next } = useInfiniteScroll(requestUrl)
-  const { book, author, availability, seeBook } = useStore();
-
-  useEffect(() => {
-    let newUrl = new URL(defaultUrl);
-
-    if (book.value.length > 0)
-      newUrl.searchParams.append('ids', book.value.join(','));
-    if (author.value.length > 0)
-      newUrl.searchParams.append('authorIds', author.value.join(','));
-
-    for (const key of availability) {
-      newUrl.searchParams.append(key, 'true');
-    }
-
-    setRequestUrl(newUrl.href)
-  }, [book, author, availability]);
-
+  const { seeBook, triggerRefresh } = useStore();
+  const { data, isLoading, next } = useInfiniteScroll(getListingUrl())
 
   const handleScroll = (x, y) => {
     infiniteScrollTrigger(y, data, next)

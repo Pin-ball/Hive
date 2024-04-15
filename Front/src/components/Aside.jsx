@@ -15,7 +15,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Aside() {
   const customToaster = useToaster();
-  const { selectedBook, closeBook, showModal } = useStore();
+  const { selectedBook, closeBook, showModal, triggerRefresh } = useStore();
 
 
   let URL = selectedBook ? `${url.backend}/book/${selectedBook}` : null
@@ -43,7 +43,6 @@ export default function Aside() {
 
   const returnBook = async () => {
     const success = await update(book.borrowId,{bookId: book.id})
-    console.log(success)
     if (success) {
       toaster.push(<Message type="success">Livre retourné</Message>);
       closeBook()
@@ -73,7 +72,11 @@ export default function Aside() {
     const action = async () => {
       customToaster.clear()
       const success = await del('book', book.id)
-      setTimeout(() => { feedback(success, "Livre supprimé") }, 1000)
+      setTimeout(() => {
+        feedback(success, "Livre supprimé")
+        closeBook()
+        triggerRefresh()
+      }, 1000)
     }
 
     customToaster.push(message(action), {duration: 10000})
@@ -83,7 +86,11 @@ export default function Aside() {
     const action = async () => {
       customToaster.clear()
       const success = await del('author', book.author.id)
-      setTimeout(() => { feedback(success, "Auteur supprimé") }, 1000)
+      setTimeout(() => {
+        feedback(success, "Auteur supprimé")
+        closeBook()
+        triggerRefresh()
+      }, 1000)
     }
 
     customToaster.push(message(action), {duration: 10000})
@@ -174,7 +181,7 @@ export default function Aside() {
               { book.borrows.map((borrow, i) => (
                 <li key={i} className={clsx('pl-3 py-1 mb-2 rounded-r-lg',
                   {'border-c-gray-500 border-l': borrow.end,
-                    'bg-c-gray-600 border-c-blue-500 border-l-2': borrow.end === null}
+                    'border-c-blue-500 border-l-2': borrow.end === null}
                 )}>
                   <div>{borrow.customerEmail}</div>
                   <p className='text-c-gray-300 mt-0.5'>{borrow.start !== null && borrow.start.replace('T', ' ').slice(0,16)}

@@ -1,3 +1,6 @@
+import useStore from "@src/store/research.js";
+import {url} from "@src/utils/config.js";
+
 const infiniteScrollTrigger = (y, data, action) => {
   // TODO: Changer tableHeight pour une ref sur le tableau
   const tableHeight = 800;
@@ -9,6 +12,23 @@ const infiniteScrollTrigger = (y, data, action) => {
   }
 };
 
+const getListingUrl = () => {
+  const { book, author, availability} = useStore();
+
+  let newUrl = new URL(`${url.backend}/book/list`);
+
+  if (book.value.length > 0)
+    newUrl.searchParams.append('ids', book.value.join(','));
+  if (author.value.length > 0)
+    newUrl.searchParams.append('authorIds', author.value.join(','));
+
+  for (const key of availability) {
+    newUrl.searchParams.append(key, 'true');
+  }
+
+  return newUrl.href
+}
+
 const formatToForm = (data) => {
     for (const key in data) {
       if (key.includes('Date'))
@@ -19,5 +39,6 @@ const formatToForm = (data) => {
 
 export {
   infiniteScrollTrigger,
+  getListingUrl,
   formatToForm
 }

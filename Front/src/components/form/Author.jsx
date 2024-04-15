@@ -1,5 +1,4 @@
 import { Schema } from 'rsuite';
-import { useCreate } from "@src/hooks/request";
 import { Field, Textarea } from '@src/components/form/Fields';
 import { formatToForm } from "@src/utils/listing";
 import Edition from "@src/components/form/Edition";
