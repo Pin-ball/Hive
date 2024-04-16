@@ -1,0 +1,45 @@
+
+ USE hive_db;
+ 
+ ALTER DATABASE hive_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+
+ DROP TABLE IF EXISTS `book`;
+ CREATE TABLE `book` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `authorId` INT NOT NULL,
+  `editor` VARCHAR(255) NOT NULL,
+  `publicationDate` TIMESTAMP NOT NULL,
+  `ISBN` VARCHAR(255) NOT NULL UNIQUE,
+  `genre` VARCHAR(255) NOT NULL,
+  `resume` TEXT NOT NULL,
+  `pages` INT DEFAULT 0,
+  `language` varchar(50) NOT NULL,
+  `borrowId` INT,
+  `creationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modificationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ DROP TABLE IF EXISTS `author`;
+ CREATE TABLE `author` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  `biography` TEXT NOT NULL,
+  `country` VARCHAR(255) NOT NULL,
+  `creationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modificationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ DROP TABLE IF EXISTS `borrow`;
+ CREATE TABLE `borrow` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `bookId` INT NOT NULL,
+  `customerEmail` VARCHAR(255) NOT NULL,
+  `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `endDate` DATETIME
+);
